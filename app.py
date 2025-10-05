@@ -62,7 +62,7 @@ async def notify(msg):
         try:
             bot = telegram.Bot(token=TG_TOKEN)
             logger.info("Sending Telegram notification...")
-            # await bot.send_message(chat_id=TG_CHAT_ID, text=msg[:4000])
+            await bot.send_message(chat_id=TG_CHAT_ID, text=msg[:4000])
             logger.info("Telegram notification sent successfully")
         except Exception as e:
             logger.error(f"Telegram notify failed: {str(e)}", exc_info=True)
