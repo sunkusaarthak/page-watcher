@@ -19,10 +19,11 @@ app = Flask(__name__)
 URL = "https://www.intelligentexistence.com/connect-to-clarity/"
 
 INIT_DIR = "init"
-if os.path.exists("/data"):
-    DATA_DIR = "/data"   # Render
+# Change data directory to be within project folder on Render
+if os.path.exists("/opt/render"):
+    DATA_DIR = "storage"   # Render - use local project directory
 else:
-    DATA_DIR = "/data"    # Local
+    DATA_DIR = "data"    # Local development
 
 # Create data directory at startup
 os.makedirs(DATA_DIR, exist_ok=True)
