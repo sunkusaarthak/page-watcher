@@ -22,7 +22,7 @@ INIT_DIR = "init"
 if os.path.exists("/data"):
     DATA_DIR = "/data"   # Render
 else:
-    DATA_DIR = "data"    # Local
+    DATA_DIR = "/data"    # Local
 
 # Create data directory at startup
 os.makedirs(DATA_DIR, exist_ok=True)
@@ -33,6 +33,19 @@ LAST_HTML_FILE = os.path.join(DATA_DIR, "last_page.html")
 
 INIT_STATE_FILE = os.path.join(INIT_DIR, "last_hash.txt")
 INIT_HTML_FILE = os.path.join(INIT_DIR, "last_page.html")
+
+# Copy init files to data directory if they don't exist
+if os.path.exists(INIT_STATE_FILE) and not os.path.exists(STATE_FILE):
+    shutil.copy2(INIT_STATE_FILE, STATE_FILE)
+    logger.info(f"Copied initial state file to {STATE_FILE}")
+else:
+    logger.info(f"something is present in {STATE_FILE}")
+
+if os.path.exists(INIT_HTML_FILE) and not os.path.exists(LAST_HTML_FILE):
+    shutil.copy2(INIT_HTML_FILE, LAST_HTML_FILE)
+    logger.info(f"Copied initial HTML file to {LAST_HTML_FILE}")
+else:
+    logger.info(f"something is present in {LAST_HTML_FILE}")
 
 # Environment variables from Render dashboard
 TG_TOKEN = os.getenv("TG_TOKEN", "8178146691:AAGRjObZRRFmkmKBJ7GOK_zBeCBLGdiIn8U")
@@ -183,12 +196,4 @@ async def test():
     return jsonify({"status": "ok", "message": "Telegram message sent"})
 
 if __name__ == "__main__":
-    # Copy init files to data directory if they don't exist
-    if os.path.exists(INIT_STATE_FILE) and not os.path.exists(STATE_FILE):
-        shutil.copy2(INIT_STATE_FILE, STATE_FILE)
-        logger.info(f"Copied initial state file to {STATE_FILE}")
-
-    if os.path.exists(INIT_HTML_FILE) and not os.path.exists(LAST_HTML_FILE):
-        shutil.copy2(INIT_HTML_FILE, LAST_HTML_FILE)
-        logger.info(f"Copied initial HTML file to {LAST_HTML_FILE}")
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
