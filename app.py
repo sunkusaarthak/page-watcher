@@ -62,7 +62,7 @@ async def notify(msg):
         try:
             bot = telegram.Bot(token=TG_TOKEN)
             logger.info("Sending Telegram notification...")
-            await bot.send_message(chat_id=TG_CHAT_ID, text=msg[:4000])
+            # await bot.send_message(chat_id=TG_CHAT_ID, text=msg[:4000])
             logger.info("Telegram notification sent successfully")
         except Exception as e:
             logger.error(f"Telegram notify failed: {str(e)}", exc_info=True)
@@ -129,7 +129,7 @@ async def index():
             
         cleaned_html = clean_html(html)
         new_hash = compute_hash(cleaned_html)
-        logger.debug(f"New page hash: {new_hash}")
+        logger.info(f"New page hash: {new_hash}")
 
         old_hash = None
         if os.path.exists(STATE_FILE):
