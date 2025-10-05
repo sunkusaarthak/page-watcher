@@ -24,6 +24,10 @@ if os.path.exists("/data"):
 else:
     DATA_DIR = "data"    # Local
 
+# Create data directory at startup
+os.makedirs(DATA_DIR, exist_ok=True)
+logger.info(f"Initialized data directory: {DATA_DIR}")
+
 STATE_FILE = os.path.join(DATA_DIR, "last_hash.txt")
 LAST_HTML_FILE = os.path.join(DATA_DIR, "last_page.html")
 
@@ -156,6 +160,7 @@ async def index():
                 logger.info("State files updated successfully")
             except Exception as e:
                 logger.error(f"Error updating state files: {str(e)}", exc_info=True)
+                raise
 
             return jsonify({"status": "Changed"})
         else:
