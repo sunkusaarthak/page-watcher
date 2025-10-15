@@ -183,7 +183,9 @@ async def index():
             logger.debug("No changes detected")
             return jsonify({"status": "Not Changed"})
     except Exception as e:
-        logger.error(f"Watcher error: {str(e)}", exc_info=True)
+        global error_count
+        error_count += 1
+        logger.error(f"Watcher error: {str(e)}, Error count {str(error_count)}", exc_info=True)
         if error_count == 72:
             await notify(f"Watcher Error: {e}")
             error_count = 1
