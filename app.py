@@ -18,6 +18,8 @@ app = Flask(__name__)
 
 URL = "https://www.intelligentexistence.com/connect-to-clarity/"
 
+error_count = 1
+
 INIT_DIR = "init"
 # Change data directory to be within project folder on Render
 if os.path.exists("/opt/render"):
@@ -182,7 +184,9 @@ async def index():
             return jsonify({"status": "Not Changed"})
     except Exception as e:
         logger.error(f"Watcher error: {str(e)}", exc_info=True)
-        await notify(f"Watcher Error: {e}")
+        if error_count == 72:
+            await notify(f"Watcher Error: {e}")
+            error_count = 1
         return jsonify({"status": "error", "error": str(e)}), 500
 
 @app.route("/heartbeat")
